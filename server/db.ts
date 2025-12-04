@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, partners, InsertPartner, collectionPoints } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,53 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function createPartner(partner: InsertPartner) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create partner: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.insert(partners).values(partner);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to create partner:", error);
+    throw error;
+  }
+}
+
+export async function getCollectionPoints() {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get collection points: database not available");
+    return [];
+  }
+
+  try {
+    const result = await db.select().from(collectionPoints);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to get collection points:", error);
+    return [];
+  }
+}
+
+export async function getPartnersByType(partnerType: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get partners: database not available");
+    return [];
+  }
+
+  try {
+    const result = await db
+      .select()
+      .from(partners)
+      .where(eq(partners.partnerType, partnerType as any));
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to get partners:", error);
+    return [];
+  }
+}
