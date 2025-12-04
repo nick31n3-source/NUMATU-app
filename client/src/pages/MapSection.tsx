@@ -12,12 +12,12 @@ export default function MapSection() {
     {
       id: 1,
       name: "Senac Parnaíba",
-      latitude: "-3.0928",
-      longitude: "-41.7711",
-      address: "Avenida Getúlio Vargas, Parnaíba - PI",
+      latitude: "-3.0950",
+      longitude: "-41.7700",
+      address: "Conjunto Jardim Vitória, Qu 5, 8 - Parnaíba - PI",
       city: "Parnaíba",
       state: "PI",
-      description: "Centro de coleta e educação ambiental",
+      description: "Centro de coleta e educação ambiental - Projeto NUMATU",
     },
   ];
 

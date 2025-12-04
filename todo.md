@@ -45,3 +45,17 @@
 - [x] Usar logo oficial do NUMATU do Sympla
 - [x] Aplicar cores oficiais do NUMATU conforme evento
 - [x] Usar slogan oficial do NUMATU
+
+
+## Correções Solicitadas
+- [x] Limpar campos do formulário de cadastro (remover valores pré-preenchidos)
+- [x] Corrigir localização do ponto de coleta no mapa (Senac Parnaíba - coordenadas corretas)
+- [x] Integração WhatsApp Business API com automação de boas-vindas
+- [x] Seção de Depoimentos/Casos de Sucesso
+- [x] Blog com artigos sobre Logística Reversa
+
+
+## Configuração de Secrets Necessários
+- [ ] WHATSAPP_API_URL - URL da API WhatsApp Business
+- [ ] WHATSAPP_API_TOKEN - Token de autenticação WhatsApp
+- [ ] WHATSAPP_PHONE_NUMBER_ID - ID do número de telefone WhatsApp Business

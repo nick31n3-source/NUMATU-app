@@ -5,6 +5,7 @@ import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { createPartner, getCollectionPoints } from "./db";
 import { notifyOwner } from "./_core/notification";
+import { sendWhatsAppWelcomeMessage } from "./whatsapp";
 
 export const appRouter = router({
   system: systemRouter,
@@ -42,6 +43,16 @@ export const appRouter = router({
               title: `Novo Parceiro Interessado: ${input.partnerType}`,
               content: `${input.name} (${input.email}) se registrou como ${input.partnerType}${input.companyName ? ` - ${input.companyName}` : ""}`,
             });
+
+            // Send WhatsApp welcome message if phone is provided
+            if (input.phone) {
+              await sendWhatsAppWelcomeMessage({
+                phone: input.phone,
+                name: input.name,
+                partnerType: input.partnerType,
+                email: input.email,
+              });
+            }
           }
           return { success: !!result };
         } catch (error) {
