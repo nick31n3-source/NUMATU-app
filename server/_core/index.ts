@@ -79,10 +79,12 @@ async function startServer() {
     serveStatic(app);
   }
 
-  const port = process.env.PORT || 3000;
+  // Em ambientes de produção como Render, process.env.PORT é definido.
+  // Em desenvolvimento, usamos 3000 como fallback.
+  const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
-  server.listen(port, () => {
-    console.log(`Server running on port ${port}/`);
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on http://0.0.0.0:${port}/`);
   });
 }
 
