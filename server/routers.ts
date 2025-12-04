@@ -6,7 +6,6 @@ import { z } from "zod";
 import { createPartner, getCollectionPoints } from "./db";
 import { notifyOwner } from "./_core/notification";
 import { sendWhatsAppWelcomeMessage } from "./whatsapp";
-import { sendPartnerRegistrationEmail, sendPartnerConfirmationEmail } from "./email";
 
 export const appRouter = router({
   system: systemRouter,
@@ -44,25 +43,6 @@ export const appRouter = router({
               title: `Novo Parceiro Interessado: ${input.partnerType}`,
               content: `${input.name} (${input.email}) se registrou como ${input.partnerType}${input.companyName ? ` - ${input.companyName}` : ""}`,
             });
-
-            // Send registration email to numatucorp@gmail.com
-            await sendPartnerRegistrationEmail({
-              name: input.name,
-              email: input.email,
-              phone: input.phone,
-              partnerType: input.partnerType,
-              companyName: input.companyName,
-              city: input.city,
-              state: input.state,
-              message: input.message,
-            });
-
-            // Send confirmation email to partner
-            await sendPartnerConfirmationEmail(
-              input.email,
-              input.name,
-              input.partnerType
-            );
 
             // Send WhatsApp welcome message if phone is provided
             if (input.phone) {
