@@ -1,23 +1,19 @@
 import {
-  integer,
   pgEnum,
   pgTable,
-  text,
-  timestamp,
-  varchar,
-  mysqlEnum,
-  mysqlTable,
-  int,
-  mysqlTimestamp,
-} from "drizzle-orm/mysql-core";
-import {
-  integer as pgInteger,
-  pgEnum as pgEnumType,
-  pgTable as pgTableType,
   text as pgText,
   timestamp as pgTimestamp,
   varchar as pgVarchar,
+  integer as pgInteger,
 } from "drizzle-orm/pg-core";
+import {
+  mysqlEnum,
+  mysqlTable,
+  text as mysqlText,
+  mysqlTimestamp,
+  varchar as mysqlVarchar,
+  int as mysqlInt,
+} from "drizzle-orm/mysql-core";
 
 // Detectar o tipo de banco de dados
 const isPostgreSQL = process.env.DATABASE_URL?.startsWith("postgresql://") || process.env.DATABASE_URL?.startsWith("postgres://");
@@ -28,23 +24,23 @@ const isPostgreSQL = process.env.DATABASE_URL?.startsWith("postgresql://") || pr
  * Columns use camelCase to match both database fields and generated types.
  */
 export const users = isPostgreSQL
-  ? pgTableType("users", {
+  ? pgTable("users", {
       id: pgInteger("id").primaryKey().generatedAlwaysAsIdentity(),
       openId: pgVarchar("openId", { length: 64 }).notNull().unique(),
       name: pgText("name"),
       email: pgVarchar("email", { length: 320 }),
       loginMethod: pgVarchar("loginMethod", { length: 64 }),
-      role: pgEnumType("role", ["user", "admin"]).default("user").notNull(),
+      role: pgEnum("role", ["user", "admin"]).default("user").notNull(),
       createdAt: pgTimestamp("createdAt", { withTimezone: true }).defaultNow().notNull(),
       updatedAt: pgTimestamp("updatedAt", { withTimezone: true }).defaultNow().notNull(),
       lastSignedIn: pgTimestamp("lastSignedIn", { withTimezone: true }).defaultNow().notNull(),
     })
   : mysqlTable("users", {
-      id: int("id").autoincrement().primaryKey(),
-      openId: varchar("openId", { length: 64 }).notNull().unique(),
-      name: text("name"),
-      email: varchar("email", { length: 320 }),
-      loginMethod: varchar("loginMethod", { length: 64 }),
+      id: mysqlInt("id").autoincrement().primaryKey(),
+      openId: mysqlVarchar("openId", { length: 64 }).notNull().unique(),
+      name: mysqlText("name"),
+      email: mysqlVarchar("email", { length: 320 }),
+      loginMethod: mysqlVarchar("loginMethod", { length: 64 }),
       role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
       createdAt: mysqlTimestamp("createdAt").defaultNow().notNull(),
       updatedAt: mysqlTimestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -58,12 +54,12 @@ export type InsertUser = typeof users.$inferInsert;
  * Partners table for companies, collectors, and buyers interested in NUMATU
  */
 export const partners = isPostgreSQL
-  ? pgTableType("partners", {
+  ? pgTable("partners", {
       id: pgInteger("id").primaryKey().generatedAlwaysAsIdentity(),
       name: pgVarchar("name", { length: 255 }).notNull(),
       email: pgVarchar("email", { length: 320 }).notNull(),
       phone: pgVarchar("phone", { length: 20 }),
-      partnerType: pgEnumType("partnerType", ["company", "collector", "buyer"]).notNull(),
+      partnerType: pgEnum("partnerType", ["company", "collector", "buyer"]).notNull(),
       companyName: pgVarchar("companyName", { length: 255 }),
       city: pgVarchar("city", { length: 100 }),
       state: pgVarchar("state", { length: 2 }),
@@ -73,16 +69,16 @@ export const partners = isPostgreSQL
       updatedAt: pgTimestamp("updatedAt", { withTimezone: true }).defaultNow().notNull(),
     })
   : mysqlTable("partners", {
-      id: int("id").autoincrement().primaryKey(),
-      name: varchar("name", { length: 255 }).notNull(),
-      email: varchar("email", { length: 320 }).notNull(),
-      phone: varchar("phone", { length: 20 }),
+      id: mysqlInt("id").autoincrement().primaryKey(),
+      name: mysqlVarchar("name", { length: 255 }).notNull(),
+      email: mysqlVarchar("email", { length: 320 }).notNull(),
+      phone: mysqlVarchar("phone", { length: 20 }),
       partnerType: mysqlEnum("partnerType", ["company", "collector", "buyer"]).notNull(),
-      companyName: varchar("companyName", { length: 255 }),
-      city: varchar("city", { length: 100 }),
-      state: varchar("state", { length: 2 }),
-      message: text("message"),
-      whatsappNumber: varchar("whatsappNumber", { length: 20 }),
+      companyName: mysqlVarchar("companyName", { length: 255 }),
+      city: mysqlVarchar("city", { length: 100 }),
+      state: mysqlVarchar("state", { length: 2 }),
+      message: mysqlText("message"),
+      whatsappNumber: mysqlVarchar("whatsappNumber", { length: 20 }),
       createdAt: mysqlTimestamp("createdAt").defaultNow().notNull(),
       updatedAt: mysqlTimestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
     });
@@ -94,7 +90,7 @@ export type InsertPartner = typeof partners.$inferInsert;
  * Collection points table for mapping optimal collection locations
  */
 export const collectionPoints = isPostgreSQL
-  ? pgTableType("collectionPoints", {
+  ? pgTable("collectionPoints", {
       id: pgInteger("id").primaryKey().generatedAlwaysAsIdentity(),
       name: pgVarchar("name", { length: 255 }).notNull(),
       latitude: pgVarchar("latitude", { length: 50 }).notNull(),
@@ -107,14 +103,14 @@ export const collectionPoints = isPostgreSQL
       updatedAt: pgTimestamp("updatedAt", { withTimezone: true }).defaultNow().notNull(),
     })
   : mysqlTable("collectionPoints", {
-      id: int("id").autoincrement().primaryKey(),
-      name: varchar("name", { length: 255 }).notNull(),
-      latitude: varchar("latitude", { length: 50 }).notNull(),
-      longitude: varchar("longitude", { length: 50 }).notNull(),
-      address: text("address"),
-      city: varchar("city", { length: 100 }).notNull(),
-      state: varchar("state", { length: 2 }).notNull(),
-      description: text("description"),
+      id: mysqlInt("id").autoincrement().primaryKey(),
+      name: mysqlVarchar("name", { length: 255 }).notNull(),
+      latitude: mysqlVarchar("latitude", { length: 50 }).notNull(),
+      longitude: mysqlVarchar("longitude", { length: 50 }).notNull(),
+      address: mysqlText("address"),
+      city: mysqlVarchar("city", { length: 100 }).notNull(),
+      state: mysqlVarchar("state", { length: 2 }).notNull(),
+      description: mysqlText("description"),
       createdAt: mysqlTimestamp("createdAt").defaultNow().notNull(),
       updatedAt: mysqlTimestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
     });
