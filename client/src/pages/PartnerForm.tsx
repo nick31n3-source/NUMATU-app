@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
-import { Loader2 } from "lucide-react";
+import { Loader2, MessageCircle } from "lucide-react";
 import { IMaskInput } from "react-imask";
 
 export default function PartnerForm() {
@@ -15,6 +15,7 @@ export default function PartnerForm() {
     name: string;
     email: string;
     phone: string;
+    whatsappNumber: string;
     partnerType: "company" | "collector" | "buyer";
     companyName: string;
     city: string;
@@ -24,6 +25,7 @@ export default function PartnerForm() {
     name: "",
     email: "",
     phone: "",
+    whatsappNumber: "",
     partnerType: "company",
     companyName: "",
     city: "",
@@ -33,11 +35,12 @@ export default function PartnerForm() {
 
   const submitMutation = trpc.partners.submit.useMutation({
     onSuccess: () => {
-      toast.success("Cadastro realizado com sucesso! Entraremos em contato em breve.");
+      toast.success("Cadastro realizado com sucesso! Você receberá uma mensagem de boas-vindas no WhatsApp em breve.");
       setFormData({
         name: "",
         email: "",
         phone: "",
+        whatsappNumber: "",
         partnerType: "company",
         companyName: "",
         city: "",
@@ -45,7 +48,8 @@ export default function PartnerForm() {
         message: "",
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Erro ao enviar formulário:", error);
       toast.error("Erro ao enviar formulário. Tente novamente.");
     },
   });
@@ -59,8 +63,29 @@ export default function PartnerForm() {
     setFormData(prev => ({ ...prev, partnerType: value as "company" | "collector" | "buyer" }));
   };
 
+  const handlePhoneChange = (value: string) => {
+    setFormData(prev => ({ ...prev, phone: value }));
+  };
+
+  const handleWhatsAppChange = (value: string) => {
+    setFormData(prev => ({ ...prev, whatsappNumber: value }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validação básica
+    if (!formData.name || !formData.email || !formData.partnerType) {
+      toast.error("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    // Validar se pelo menos um número de telefone foi fornecido
+    if (!formData.phone && !formData.whatsappNumber) {
+      toast.error("Por favor, forneça pelo menos um número de telefone ou WhatsApp.");
+      return;
+    }
+
     submitMutation.mutate(formData);
   };
 
@@ -129,6 +154,19 @@ export default function PartnerForm() {
                 </ul>
               </div>
             ))}
+
+            {/* Info Box */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-8">
+              <div className="flex gap-3">
+                <MessageCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="font-semibold text-blue-900 mb-1">Suporte via WhatsApp</h4>
+                  <p className="text-sm text-blue-700">
+                    Após se cadastrar, você receberá uma mensagem de boas-vindas personalizada via WhatsApp com informações sobre próximos passos.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Form */}
@@ -138,7 +176,7 @@ export default function PartnerForm() {
               {/* Partner Type */}
               <div className="space-y-2">
                 <Label htmlFor="partnerType" className="text-gray-700 font-semibold">
-                  Tipo de Parceiro
+                  Tipo de Parceiro <span className="text-red-500">*</span>
                 </Label>
                 <Select value={formData.partnerType} onValueChange={handleSelectChange}>
                   <SelectTrigger id="partnerType" className="border-gray-300">
@@ -157,7 +195,7 @@ export default function PartnerForm() {
               {/* Name */}
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-gray-700 font-semibold">
-                  Nome Completo
+                  Nome Completo <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="name"
@@ -173,7 +211,7 @@ export default function PartnerForm() {
               {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-gray-700 font-semibold">
-                  Email
+                  Email <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="email"
@@ -195,12 +233,28 @@ export default function PartnerForm() {
                 <IMaskInput
                   mask="(00) 00000-0000"
                   value={formData.phone}
-                  onAccept={(value: string) => {
-                    setFormData({ ...formData, phone: value });
-                  }}
+                  onAccept={handlePhoneChange}
                   placeholder="(86) 99586-2231"
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 />
+              </div>
+
+              {/* WhatsApp Number */}
+              <div className="space-y-2">
+                <Label htmlFor="whatsappNumber" className="text-gray-700 font-semibold flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4 text-green-600" />
+                  Número WhatsApp
+                </Label>
+                <IMaskInput
+                  mask="(00) 00000-0000"
+                  value={formData.whatsappNumber}
+                  onAccept={handleWhatsAppChange}
+                  placeholder="(86) 99586-2231"
+                  className="flex h-10 w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                />
+                <p className="text-xs text-gray-500">
+                  Use este número para receber mensagens de boas-vindas e suporte via WhatsApp
+                </p>
               </div>
 
               {/* Company Name */}
@@ -283,6 +337,8 @@ export default function PartnerForm() {
 
               <p className="text-xs text-gray-500 text-center">
                 Seus dados serão usados apenas para contato sobre parcerias NUMATU.
+                <br />
+                <span className="text-red-500">* Campos obrigatórios</span>
               </p>
             </form>
           </Card>
