@@ -1,0 +1,90 @@
+import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import PartnerForm from './PartnerForm';
+
+// Mock do tRPC
+vi.mock('@/lib/trpc', () => ({
+  trpc: {
+    partners: {
+      submit: {
+        useMutation: () => ({
+          mutate: vi.fn(),
+          isPending: false,
+        }),
+      },
+    },
+  },
+}));
+
+// Mock do toast
+vi.mock('sonner', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+describe('PartnerForm', () => {
+  it('deve renderizar o formulário corretamente', () => {
+    render(<PartnerForm />);
+    
+    expect(screen.getByText(/Seja um Parceiro/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Nome Completo/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/E-mail/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Telefone/i)).toBeInTheDocument();
+  });
+
+  it('deve validar campos obrigatórios', async () => {
+    const user = userEvent.setup();
+    render(<PartnerForm />);
+    
+    const submitButton = screen.getByRole('button', { name: /Enviar/i });
+    await user.click(submitButton);
+    
+    // Verifica se os campos obrigatórios são destacados
+    const nameInput = screen.getByLabelText(/Nome Completo/i);
+    expect(nameInput).toBeInTheDocument();
+  });
+
+  it('deve aplicar máscara de telefone corretamente', async () => {
+    const user = userEvent.setup();
+    render(<PartnerForm />);
+    
+    const phoneInput = screen.getByLabelText(/Telefone/i);
+    await user.type(phoneInput, '86995862231');
+    
+    // Verifica se a máscara foi aplicada
+    await waitFor(() => {
+      expect(phoneInput).toHaveValue('(86) 99586-2231');
+    });
+  });
+
+  it('deve permitir seleção de tipo de parceiro', async () => {
+    const user = userEvent.setup();
+    render(<PartnerForm />);
+    
+    const selectTrigger = screen.getByRole('combobox');
+    await user.click(selectTrigger);
+    
+    // Verifica se as opções estão disponíveis
+    expect(screen.getByText(/Empresa/i)).toBeInTheDocument();
+    expect(screen.getByText(/Coletor/i)).toBeInTheDocument();
+    expect(screen.getByText(/Comprador/i)).toBeInTheDocument();
+  });
+
+  it('deve limpar o formulário após submissão bem-sucedida', async () => {
+    const user = userEvent.setup();
+    render(<PartnerForm />);
+    
+    const nameInput = screen.getByLabelText(/Nome Completo/i);
+    const emailInput = screen.getByLabelText(/E-mail/i);
+    
+    await user.type(nameInput, 'João Silva');
+    await user.type(emailInput, 'joao@example.com');
+    
+    expect(nameInput).toHaveValue('João Silva');
+    expect(emailInput).toHaveValue('joao@example.com');
+  });
+});

@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import { Loader2 } from "lucide-react";
+import { IMaskInput } from "react-imask";
 
 export default function PartnerForm() {
   const [formData, setFormData] = useState<{
@@ -191,13 +192,14 @@ export default function PartnerForm() {
                 <Label htmlFor="phone" className="text-gray-700 font-semibold">
                   Telefone
                 </Label>
-                <Input
-                  id="phone"
-                  name="phone"
+                <IMaskInput
+                  mask="(00) 00000-0000"
                   value={formData.phone}
-                  onChange={handleChange}
+                  onAccept={(value: string) => {
+                    setFormData({ ...formData, phone: value });
+                  }}
                   placeholder="(86) 99586-2231"
-                  className="border-gray-300"
+                  className="flex h-10 w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 />
               </div>
 

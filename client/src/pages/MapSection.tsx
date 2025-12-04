@@ -4,7 +4,8 @@ import { trpc } from "@/lib/trpc";
 import { Loader2, MapPin } from "lucide-react";
 
 export default function MapSection() {
-  const { data: collectionPoints, isLoading } = trpc.collectionPoints.list.useQuery();
+  const { data: response, isLoading } = trpc.collectionPoints.list.useQuery();
+  const collectionPoints = response?.data;
   const [mapReady, setMapReady] = useState(false);
 
   // Default collection points for Parnaíba-PI
@@ -22,6 +23,7 @@ export default function MapSection() {
   ];
 
   const points = collectionPoints && collectionPoints.length > 0 ? collectionPoints : defaultPoints;
+  const totalPoints = response?.pagination?.total || points.length;
 
   return (
     <section id="map" className="py-20 bg-white">

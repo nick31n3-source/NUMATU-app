@@ -24,14 +24,14 @@ export const appRouter = router({
     submit: publicProcedure
       .input(
         z.object({
-          name: z.string().min(2),
-          email: z.string().email(),
-          phone: z.string().optional(),
+          name: z.string().min(2).max(255).trim(),
+          email: z.string().email().max(320).toLowerCase().trim(),
+          phone: z.string().regex(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/).optional().or(z.literal('')),
           partnerType: z.enum(["company", "collector", "buyer"]),
-          companyName: z.string().optional(),
-          city: z.string().optional(),
-          state: z.string().optional(),
-          message: z.string().optional(),
+          companyName: z.string().max(255).trim().optional().or(z.literal('')),
+          city: z.string().max(100).trim().optional().or(z.literal('')),
+          state: z.string().length(2).toUpperCase().trim().optional().or(z.literal('')),
+          message: z.string().max(1000).trim().optional().or(z.literal('')),
         })
       )
       .mutation(async ({ input }) => {
@@ -63,9 +63,32 @@ export const appRouter = router({
   }),
 
   collectionPoints: router({
-    list: publicProcedure.query(async () => {
-      return await getCollectionPoints();
-    }),
+    list: publicProcedure
+      .input(
+        z.object({
+          page: z.number().min(1).default(1),
+          limit: z.number().min(1).max(100).default(50),
+        }).optional()
+      )
+      .query(async ({ input }) => {
+        const page = input?.page || 1;
+        const limit = input?.limit || 50;
+        const offset = (page - 1) * limit;
+        
+        const points = await getCollectionPoints();
+        const total = points.length;
+        const paginatedPoints = points.slice(offset, offset + limit);
+        
+        return {
+          data: paginatedPoints,
+          pagination: {
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+          },
+        };
+      }),
   }),
 });
 

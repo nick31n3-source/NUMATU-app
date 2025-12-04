@@ -1,0 +1,11 @@
+# robots.txt para NUMATU
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://numatu.com.br/sitemap.xml
+
+# Bloquear acesso a arquivos sensíveis
+Disallow: /api/
+Disallow: /*.json$
