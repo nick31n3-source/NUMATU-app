@@ -80,8 +80,9 @@ async function startServer() {
   }
 
   // Em ambientes de produção como Render, process.env.PORT é definido.
-  // Em desenvolvimento, usamos 3000 como fallback.
-  const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+  // Em desenvolvimento, o script 'dev' usa o Vite, que já tem sua própria configuração de porta.
+  // Para produção, usamos process.env.PORT ou 3000 como último recurso, mas forçamos o bind em 0.0.0.0.
+  const port = process.env.PORT || 3000;
 
   server.listen(port, "0.0.0.0", () => {
     console.log(`Server running on http://0.0.0.0:${port}/`);
