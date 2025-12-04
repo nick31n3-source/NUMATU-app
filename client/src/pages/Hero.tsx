@@ -24,8 +24,7 @@ export default function Hero() {
               </div>
 
               <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Conectando a Reciclagem,
-                <span className="text-green-600"> Transformando o Futuro</span>
+                <span className="text-green-600">Reciclagem & Transformação</span>
               </h1>
 
               <p className="text-xl text-gray-600 leading-relaxed">

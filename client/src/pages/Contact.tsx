@@ -38,8 +38,8 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-1">Email</h3>
-                  <a href="mailto:contato@numatu.com.br" className="text-green-100 hover:text-white transition-colors">
-                    contato@numatu.com.br
+                  <a href="mailto:numatucorp@gmail.com" className="text-green-100 hover:text-white transition-colors">
+                    numatucorp@gmail.com
                   </a>
                 </div>
               </div>

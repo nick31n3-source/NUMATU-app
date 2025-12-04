@@ -19,26 +19,6 @@ export default function MapSection() {
       state: "PI",
       description: "Centro de coleta e educação ambiental",
     },
-    {
-      id: 2,
-      name: "Ponto de Coleta Centro",
-      latitude: "-3.0950",
-      longitude: "-41.7700",
-      address: "Centro, Parnaíba - PI",
-      city: "Parnaíba",
-      state: "PI",
-      description: "Ponto de coleta estratégico no centro da cidade",
-    },
-    {
-      id: 3,
-      name: "Ponto de Coleta Zona Leste",
-      latitude: "-3.1050",
-      longitude: "-41.7500",
-      address: "Zona Leste, Parnaíba - PI",
-      city: "Parnaíba",
-      state: "PI",
-      description: "Ponto de coleta na zona leste",
-    },
   ];
 
   const points = collectionPoints && collectionPoints.length > 0 ? collectionPoints : defaultPoints;

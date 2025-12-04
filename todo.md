@@ -37,3 +37,11 @@
 - [ ] SEO básico
 - [ ] Testes de acessibilidade
 - [ ] Checkpoint final e entrega
+
+## Atualizações Solicitadas
+- [x] Atualizar email de contato para numatucorp@gmail.com
+- [x] Remover ponto de coleta do Centro
+- [x] Remover ponto de coleta da Zona Leste
+- [x] Usar logo oficial do NUMATU do Sympla
+- [x] Aplicar cores oficiais do NUMATU conforme evento
+- [x] Usar slogan oficial do NUMATU

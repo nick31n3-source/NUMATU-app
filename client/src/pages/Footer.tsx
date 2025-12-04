@@ -57,10 +57,10 @@ export default function Footer() {
               <li className="flex items-start gap-2">
                 <Mail className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
                 <a
-                  href="mailto:contato@numatu.com.br"
+                  href="mailto:numatucorp@gmail.com"
                   className="text-gray-400 hover:text-green-500 transition-colors text-sm"
                 >
-                  contato@numatu.com.br
+                  numatucorp@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
