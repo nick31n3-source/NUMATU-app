@@ -90,19 +90,10 @@ export async function getUserByOpenId(openId: string) {
 }
 
 export async function createPartner(partner: InsertPartner) {
-  const db = await getDb();
-  if (!db) {
-    console.warn("[Database] Cannot create partner: database not available");
-    return undefined;
-  }
-
-  try {
-    const result = await db.insert(partners).values(partner);
-    return result;
-  } catch (error) {
-    console.error("[Database] Failed to create partner:", error);
-    throw error;
-  }
+  // NOTE: Partners are NOT saved to database per user request
+  // Data is only sent via email and WhatsApp, then discarded
+  console.log("[Partner] Partner submission received (not saved):", partner.email);
+  return { success: true };
 }
 
 export async function getCollectionPoints() {
