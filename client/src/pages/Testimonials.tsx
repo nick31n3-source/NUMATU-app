@@ -5,60 +5,60 @@ export default function Testimonials() {
   const testimonials = [
     {
       id: 1,
-      name: "Carlos Silva",
+      name: "Roberto Mendes",
       role: "Diretor Executivo",
-      company: "Indústria de Alimentos Silva",
-      image: "👨‍💼",
+      company: "Alimentos Mendes LTDA",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Roberto",
       text: "Implementamos NUMATU há 6 meses e conseguimos reduzir custos de coleta em 45%. Além disso, nossos clientes reconhecem nosso compromisso com sustentabilidade.",
       rating: 5,
       metric: "R$ 50 mil economizados",
     },
     {
       id: 2,
-      name: "Maria Santos",
+      name: "Juliana Costa",
       role: "Coletora Autônoma",
-      company: "Reciclagem Santos",
-      image: "👩‍🔧",
+      company: "Costa Reciclagem",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Juliana",
       text: "Com as rotas otimizadas do NUMATU, minha produtividade aumentou 50%. Agora consigo atender mais clientes e ganhar muito mais. Recomendo para todos os coletores!",
       rating: 5,
       metric: "50% mais renda",
     },
     {
       id: 3,
-      name: "João Oliveira",
+      name: "Marcelo Oliveira",
       role: "Gerente de Compras",
-      company: "Recicladora Nordeste",
-      image: "👨‍💼",
+      company: "Recicladora Brasil Norte",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcelo",
       text: "NUMATU nos conectou com fornecedores de qualidade que antes era impossível encontrar. Os preços são competitivos e a logística é muito mais eficiente.",
       rating: 5,
       metric: "30% redução de custos",
     },
     {
       id: 4,
-      name: "Ana Costa",
+      name: "Fernanda Silva",
       role: "Coordenadora de Sustentabilidade",
-      company: "Varejo Costa",
-      image: "👩‍💼",
+      company: "Varejo Silva & Cia",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Fernanda",
       text: "NUMATU transformou nossa gestão de resíduos. Agora temos total rastreabilidade e conformidade com legislação ambiental. Excelente ferramenta!",
       rating: 5,
       metric: "100% conformidade",
     },
     {
       id: 5,
-      name: "Pedro Ferreira",
+      name: "Paulo Ferreira",
       role: "Coletor Autônomo",
-      company: "Coleta Inteligente",
-      image: "👨‍🔧",
+      company: "Coleta Ferreira",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Paulo",
       text: "O app é muito fácil de usar. As notificações de coleta chegam em tempo real e consigo planejar melhor meu dia. Aumentei meu faturamento significativamente.",
       rating: 5,
       metric: "Faturamento +60%",
     },
     {
       id: 6,
-      name: "Fernanda Lima",
+      name: "Carla Lima",
       role: "Diretora de Operações",
-      company: "Logística Verde",
-      image: "👩‍💼",
+      company: "Logística Verde Nordeste",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carla",
       text: "Parceria com NUMATU foi estratégica. Conseguimos expandir nossos negócios, atingir mais clientes e ainda contribuir para sustentabilidade. Win-win!",
       rating: 5,
       metric: "3x crescimento",
@@ -109,7 +109,11 @@ export default function Testimonials() {
 
               {/* Author */}
               <div className="flex items-center gap-4">
-                <div className="text-4xl">{testimonial.image}</div>
+                <img 
+                  src={testimonial.image} 
+                  alt={testimonial.name}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
                 <div>
                   <p className="font-semibold text-gray-900">{testimonial.name}</p>
                   <p className="text-sm text-gray-600">{testimonial.role}</p>

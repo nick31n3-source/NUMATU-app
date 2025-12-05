@@ -1,7 +1,10 @@
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Calendar, User } from "lucide-react";
+import { ArrowRight, Calendar, User, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Blog() {
+  const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
+
   const articles = [
     {
       id: 1,
@@ -215,7 +218,10 @@ Comece hoje mesmo!`,
                     {articles[0].date}
                   </div>
                 </div>
-                <button className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold group">
+                <button 
+                  onClick={() => setSelectedArticle(articles[0].id)}
+                  className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold group"
+                >
                   Ler Artigo Completo
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
@@ -254,7 +260,10 @@ Comece hoje mesmo!`,
                     <p className="font-medium">{article.author}</p>
                     <p>{article.date}</p>
                   </div>
-                  <button className="text-green-600 hover:text-green-700 transition-colors">
+                  <button 
+                    onClick={() => setSelectedArticle(article.id)}
+                    className="text-green-600 hover:text-green-700 transition-colors"
+                  >
                     <ArrowRight className="w-5 h-5" />
                   </button>
                 </div>
@@ -279,6 +288,47 @@ Comece hoje mesmo!`,
             </button>
           </div>
         </div>
+
+        {/* Article Modal */}
+        {selectedArticle !== null && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <Card className="w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+              <div className="p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-3xl font-bold text-gray-900">
+                    {articles.find(a => a.id === selectedArticle)?.title}
+                  </h2>
+                  <button 
+                    onClick={() => setSelectedArticle(null)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-6 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-200">
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4" />
+                    {articles.find(a => a.id === selectedArticle)?.author}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    {articles.find(a => a.id === selectedArticle)?.date}
+                  </div>
+                  <span className="text-gray-400">{articles.find(a => a.id === selectedArticle)?.readTime}</span>
+                </div>
+
+                <div className="prose prose-green max-w-none">
+                  {articles.find(a => a.id === selectedArticle)?.content.split('\n').map((paragraph, idx) => (
+                    <p key={idx} className="text-gray-700 mb-4 leading-relaxed whitespace-pre-wrap">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </div>
+        )}
       </div>
     </section>
   );
