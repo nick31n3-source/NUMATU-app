@@ -26,19 +26,22 @@ export async function sendWhatsAppWelcomeMessage(
     const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL;
     const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN;
     const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const WHATSAPP_BUSINESS_ACCOUNT_ID = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
 
-    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID) {
+    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID || !WHATSAPP_BUSINESS_ACCOUNT_ID) {
       console.warn(
-        "[WhatsApp] Missing configuration. Skipping WhatsApp message."
+        "[WhatsApp] Missing configuration (WHATSAPP_API_URL, WHATSAPP_API_TOKEN, WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_BUSINESS_ACCOUNT_ID). Skipping WhatsApp message."
       );
       return false;
     }
 
-    // Format phone number (remove special characters)
-    const formattedPhone = partner.phone?.replace(/\D/g, "") || partner.whatsappNumber?.replace(/\D/g, "");
+    // Format phone number (remove special characters and ensure international format)
+    // Prioritize whatsappNumber, then phone.
+    const rawPhone = partner.whatsappNumber || partner.phone;
+    const formattedPhone = rawPhone?.replace(/\D/g, "");
     
-    if (!formattedPhone) {
-      console.warn("[WhatsApp] No valid phone number provided");
+    if (!formattedPhone || formattedPhone.length < 10) {
+      console.warn(`[WhatsApp] Invalid phone number provided: ${rawPhone}`);
       return false;
     }
 
@@ -110,14 +113,16 @@ export async function sendFollowUpMessage(
     const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL;
     const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN;
     const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const WHATSAPP_BUSINESS_ACCOUNT_ID = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
 
-    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID) {
+    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID || !WHATSAPP_BUSINESS_ACCOUNT_ID) {
       return false;
     }
 
-    const formattedPhone = partner.phone?.replace(/\D/g, "") || partner.whatsappNumber?.replace(/\D/g, "");
+    const rawPhone = partner.whatsappNumber || partner.phone;
+    const formattedPhone = rawPhone?.replace(/\D/g, "");
     
-    if (!formattedPhone) {
+    if (!formattedPhone || formattedPhone.length < 10) {
       return false;
     }
 
@@ -163,14 +168,16 @@ export async function sendAIResponse(
     const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL;
     const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN;
     const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const WHATSAPP_BUSINESS_ACCOUNT_ID = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
 
-    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID) {
+    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID || !WHATSAPP_BUSINESS_ACCOUNT_ID) {
       return false;
     }
 
-    const formattedPhone = partner.phone?.replace(/\D/g, "") || partner.whatsappNumber?.replace(/\D/g, "");
+    const rawPhone = partner.whatsappNumber || partner.phone;
+    const formattedPhone = rawPhone?.replace(/\D/g, "");
     
-    if (!formattedPhone) {
+    if (!formattedPhone || formattedPhone.length < 10) {
       return false;
     }
 
@@ -214,8 +221,9 @@ export async function sendPromoMessage(
     const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL;
     const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN;
     const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const WHATSAPP_BUSINESS_ACCOUNT_ID = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
 
-    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID) {
+    if (!WHATSAPP_API_URL || !WHATSAPP_API_TOKEN || !WHATSAPP_PHONE_NUMBER_ID || !WHATSAPP_BUSINESS_ACCOUNT_ID) {
       return false;
     }
 
