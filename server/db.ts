@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { drizzle as drizzlePostgres } from "drizzle-orm/postgres-js";
 import { drizzle as drizzleMySQL } from "drizzle-orm/mysql2";
 import postgres from "postgres";
-import mysql from "mysql2/promise";
+import * as mysql from "mysql2/promise";
 import { InsertUser, users, partners, InsertPartner, collectionPoints } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
