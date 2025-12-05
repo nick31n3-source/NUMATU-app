@@ -2,8 +2,11 @@ import { eq } from "drizzle-orm";
 import * as drizzlePostgresModule from "drizzle-orm/postgres-js";
 import * as drizzleMySQLModule from "drizzle-orm/mysql2";
 
-const drizzlePostgres = drizzlePostgresModule.drizzle;
-const drizzleMySQL = drizzleMySQLModule.drizzle;
+// Lidar com o problema de exportação do esbuild/bundler
+const getDrizzle = (module: any) => module.drizzle || module.default?.drizzle || module.default;
+
+const drizzlePostgres = getDrizzle(drizzlePostgresModule);
+const drizzleMySQL = getDrizzle(drizzleMySQLModule);
 import postgres from "postgres";
 import * as mysql from "mysql2/promise";
 import { InsertUser, users, partners, InsertPartner, collectionPoints } from "../drizzle/schema";
