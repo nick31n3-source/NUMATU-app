@@ -3,6 +3,7 @@ import * as drizzlePostgresModule from "drizzle-orm/postgres-js";
 import * as drizzleMySQLModule from "drizzle-orm/mysql2";
 
 // Lidar com o problema de exportação do esbuild/bundler
+// O esbuild/bundler pode encapsular a exportação em .default
 const getDrizzle = (module: any) => module.drizzle || module.default?.drizzle || module.default;
 
 const drizzlePostgres = getDrizzle(drizzlePostgresModule);
