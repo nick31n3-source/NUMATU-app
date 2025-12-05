@@ -1,19 +1,8 @@
-import {
-  pgEnum,
-  pgTable,
-  text as pgText,
-  timestamp as pgTimestamp,
-  varchar as pgVarchar,
-  integer as pgInteger,
-} from "drizzle-orm/pg-core";
-import {
-  mysqlEnum,
-  mysqlTable,
-  text as mysqlText,
-  timestamp as mysqlTimestamp,
-  varchar as mysqlVarchar,
-  int as mysqlInt,
-} from "drizzle-orm/mysql-core";
+import * as pgCore from "drizzle-orm/pg-core";
+import * as mysqlCore from "drizzle-orm/mysql-core";
+
+const { pgEnum, pgTable, text: pgText, timestamp: pgTimestamp, varchar: pgVarchar, integer: pgInteger } = pgCore;
+const { mysqlEnum, mysqlTable, text: mysqlText, timestamp: mysqlTimestamp, varchar: mysqlVarchar, int: mysqlInt } = mysqlCore;
 
 // Detectar o tipo de banco de dados
 const isPostgreSQL = process.env.DATABASE_URL?.startsWith("postgresql://") || process.env.DATABASE_URL?.startsWith("postgres://");
