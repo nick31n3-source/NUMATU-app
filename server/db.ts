@@ -1,6 +1,9 @@
 import { eq } from "drizzle-orm";
-import { drizzle as drizzlePostgres } from "drizzle-orm/postgres-js";
-import { drizzle as drizzleMySQL } from "drizzle-orm/mysql2";
+import * as drizzlePostgresModule from "drizzle-orm/postgres-js";
+import * as drizzleMySQLModule from "drizzle-orm/mysql2";
+
+const drizzlePostgres = drizzlePostgresModule.drizzle;
+const drizzleMySQL = drizzleMySQLModule.drizzle;
 import postgres from "postgres";
 import * as mysql from "mysql2/promise";
 import { InsertUser, users, partners, InsertPartner, collectionPoints } from "../drizzle/schema";
