@@ -15,7 +15,7 @@ export default function PartnerForm() {
     name: string;
     email: string;
     phone: string;
-    whatsappNumber: string;
+    whatsappNumber?: string;
     partnerType: "company" | "collector" | "buyer";
     companyName: string;
     city: string;
@@ -35,12 +35,11 @@ export default function PartnerForm() {
 
   const submitMutation = trpc.partners.submit.useMutation({
     onSuccess: () => {
-      toast.success("Cadastro realizado com sucesso! Você receberá uma mensagem de boas-vindas no WhatsApp em breve.");
+      toast.success("Cadastro realizado com sucesso! Você receberá um e-mail de confirmação em breve.");
       setFormData({
         name: "",
         email: "",
         phone: "",
-        whatsappNumber: "",
         partnerType: "company",
         companyName: "",
         city: "",
@@ -67,9 +66,7 @@ export default function PartnerForm() {
     setFormData(prev => ({ ...prev, phone: value }));
   };
 
-  const handleWhatsAppChange = (value: string) => {
-    setFormData(prev => ({ ...prev, whatsappNumber: value }));
-  };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,11 +77,7 @@ export default function PartnerForm() {
       return;
     }
 
-    // Validar se pelo menos um número de telefone foi fornecido
-    if (!formData.phone && !formData.whatsappNumber) {
-      toast.error("Por favor, forneça pelo menos um número de telefone ou WhatsApp.");
-      return;
-    }
+
 
     submitMutation.mutate(formData);
   };
@@ -156,13 +149,13 @@ export default function PartnerForm() {
             ))}
 
             {/* Info Box */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-8">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-8">
               <div className="flex gap-3">
-                <MessageCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <MessageCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-blue-900 mb-1">Suporte via WhatsApp</h4>
-                  <p className="text-sm text-blue-700">
-                    Após se cadastrar, você receberá uma mensagem de boas-vindas personalizada via WhatsApp com informações sobre próximos passos.
+                  <h4 className="font-semibold text-green-900 mb-1">Confirmação por E-mail</h4>
+                  <p className="text-sm text-green-700">
+                    Após se cadastrar, você receberá um e-mail de boas-vindas com informações sobre os próximos passos e como começar sua parceria com a NUMATU.
                   </p>
                 </div>
               </div>
@@ -234,28 +227,12 @@ export default function PartnerForm() {
                   mask="(00) 00000-0000"
                   value={formData.phone}
                   onAccept={handlePhoneChange}
-                  placeholder="(86) 99586-2231"
+                  placeholder="(86) 9 9999-9999"
                   className="flex h-10 w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 />
               </div>
 
-              {/* WhatsApp Number */}
-              <div className="space-y-2">
-                <Label htmlFor="whatsappNumber" className="text-gray-700 font-semibold flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4 text-green-600" />
-                  Número WhatsApp
-                </Label>
-                <IMaskInput
-                  mask="(00) 00000-0000"
-                  value={formData.whatsappNumber}
-                  onAccept={handleWhatsAppChange}
-                  placeholder="(86) 99586-2231"
-                  className="flex h-10 w-full rounded-md border border-gray-300 bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                />
-                <p className="text-xs text-gray-500">
-                  Use este número para receber mensagens de boas-vindas e suporte via WhatsApp
-                </p>
-              </div>
+
 
               {/* Company Name */}
               <div className="space-y-2">
