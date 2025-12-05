@@ -24,7 +24,6 @@ const createEnum = isPostgreSQL ? pgEnum : mysqlEnum;
 const createText = isPostgreSQL ? pgText : mysqlText;
 const createTimestamp = isPostgreSQL ? pgTimestamp : mysqlTimestamp;
 const createVarchar = isPostgreSQL ? pgVarchar : mysqlVarchar;
-const createInteger = isPostgreSQL ? pgInteger : mysqlInt;
 
 /**
  * Core user table backing auth flow.
@@ -32,7 +31,9 @@ const createInteger = isPostgreSQL ? pgInteger : mysqlInt;
  * Columns use camelCase to match both database fields and generated types.
  */
 export const users = createTable("users", {
-  id: createInteger("id").primaryKey().generatedAlwaysAsIdentity(),
+  id: isPostgreSQL
+    ? pgInteger("id").primaryKey().generatedAlwaysAsIdentity()
+    : mysqlInt("id").autoincrement().primaryKey(),
   openId: createVarchar("openId", { length: 64 }).notNull().unique(),
   name: createText("name"),
   email: createVarchar("email", { length: 320 }),
@@ -50,7 +51,9 @@ export type InsertUser = typeof users.$inferInsert;
  * Partners table for companies, collectors, and buyers interested in NUMATU
  */
 export const partners = createTable("partners", {
-  id: createInteger("id").primaryKey().generatedAlwaysAsIdentity(),
+  id: isPostgreSQL
+    ? pgInteger("id").primaryKey().generatedAlwaysAsIdentity()
+    : mysqlInt("id").autoincrement().primaryKey(),
   name: createVarchar("name", { length: 255 }).notNull(),
   email: createVarchar("email", { length: 320 }).notNull(),
   phone: createVarchar("phone", { length: 20 }),
@@ -71,7 +74,9 @@ export type InsertPartner = typeof partners.$inferInsert;
  * Collection points table for mapping optimal collection locations
  */
 export const collectionPoints = createTable("collectionPoints", {
-  id: createInteger("id").primaryKey().generatedAlwaysAsIdentity(),
+  id: isPostgreSQL
+    ? pgInteger("id").primaryKey().generatedAlwaysAsIdentity()
+    : mysqlInt("id").autoincrement().primaryKey(),
   name: createVarchar("name", { length: 255 }).notNull(),
   latitude: createVarchar("latitude", { length: 50 }).notNull(),
   longitude: createVarchar("longitude", { length: 50 }).notNull(),
