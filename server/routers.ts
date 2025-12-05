@@ -5,8 +5,7 @@ import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { createPartner, getCollectionPoints, getPartnerById } from "./db";
 import { notifyOwner } from "./_core/notification";
-import { sendWhatsAppWelcomeMessage, sendAIResponse } from "./whatsapp";
-import { generatePartnerResponse } from "./ai_agent";
+import { sendPartnerRegistrationEmail, sendPartnerWelcomeEmail } from "./email";
 
 export const appRouter = router({
   system: systemRouter,
@@ -63,21 +62,26 @@ export const appRouter = router({
               content: `${input.name} (${input.email}) se registrou como ${input.partnerType}${input.companyName ? ` - ${input.companyName}` : ""}`,
             });
 
-            // Enviar mensagem de boas-vindas via WhatsApp com conteúdo gerado por IA
-            const whatsappPhone = input.whatsappNumber || input.phone;
-            if (whatsappPhone) {
-              try {
-                await sendWhatsAppWelcomeMessage(partner);
-              } catch (error) {
-                console.error("[Partners] Erro ao enviar mensagem WhatsApp:", error);
-                // Não bloquear o fluxo se WhatsApp falhar
-              }
+            // Enviar e-mail de notificação para numatucorp@gmail.com
+            try {
+              await sendPartnerRegistrationEmail(partner);
+            } catch (error) {
+              console.error("[Partners] Erro ao enviar e-mail de notificação:", error);
+              // Não bloquear o fluxo se o e-mail falhar
+            }
+
+            // Enviar e-mail de boas-vindas para o parceiro
+            try {
+              await sendPartnerWelcomeEmail(partner);
+            } catch (error) {
+              console.error("[Partners] Erro ao enviar e-mail de boas-vindas:", error);
+              // Não bloquear o fluxo se o e-mail falhar
             }
 
             return { 
               success: true,
               partnerId: partner.id,
-              message: "Parceiro registrado com sucesso! Você receberá uma mensagem de boas-vindas em breve.",
+              message: "Parceiro registrado com sucesso! Você receberá um e-mail de confirmação em breve.",
             };
           }
           
@@ -94,46 +98,7 @@ export const appRouter = router({
         }
       }),
 
-    /**
-     * Rota para responder perguntas de parceiros via IA
-     */
-    askQuestion: publicProcedure
-      .input(
-        z.object({
-          partnerId: z.number(),
-          question: z.string().min(5).max(500).trim(),
-        })
-      )
-      .mutation(async ({ input }) => {
-        try {
-          // Buscar dados do parceiro
-          const partner = await getPartnerById(input.partnerId);
-          
-          if (!partner) {
-            return {
-              success: false,
-              message: "Parceiro não encontrado",
-            };
-          }
 
-          // Gerar resposta via IA e enviar via WhatsApp
-          const whatsappPhone = partner.whatsappNumber || partner.phone;
-          if (whatsappPhone) {
-            await sendAIResponse(partner, input.question);
-          }
-
-          return {
-            success: true,
-            message: "Sua pergunta foi enviada para o agente de IA. Você receberá uma resposta em breve.",
-          };
-        } catch (error) {
-          console.error("[Partners] Erro ao processar pergunta:", error);
-          return {
-            success: false,
-            message: "Erro ao processar sua pergunta",
-          };
-        }
-      }),
   }),
 
   collectionPoints: router({
